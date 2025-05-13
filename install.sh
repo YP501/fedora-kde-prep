@@ -1,0 +1,256 @@
+#!/bin/sh
+set -e
+BASE_DIR=$(dirname "$(readlink -f "$0")")
+
+# Logging function
+log() {
+  echo
+  echo "🔧 [$(date +%H:%M:%S)] $1"
+  echo
+}
+
+log "It is recommended to fully upgrade and reboot the system before initializing the install script."
+printf 'Would you like to upgrade the system and reboot? (y/n) '
+read answer
+
+if [ "$answer" != "${answer#[Yy]}" ]; then 
+    log "Upgrading the system..."
+    sudo dnf upgrade -y --refresh
+
+    log "Rebooting the system..."
+    systemctl reboot
+else
+    log "Skipping upgrade. Continuing setup..."
+fi
+
+log "Clearing out downloads folder"
+rm -rf $BASE_DIR/downloads/*
+
+log "Installing needed libraries"
+sudo dnf install python3-pip git -y
+
+log "Installing JetBrains Mono Nerd Font..."
+wget -O $BASE_DIR/downloads/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+
+DIRECTORY=/usr/local/share/fonts/JetBrainsMonoNerdFont
+if [ ! -d "$DIRECTORY" ]; then
+  sudo mkdir -p $DIRECTORY
+  sudo unzip downloads/JetBrainsMono.zip -d $DIRECTORY
+fi
+
+sudo chown -R root: $DIRECTORY
+sudo chmod 644 $DIRECTORY/*
+sudo restorecon -vFr $DIRECTORY
+sudo fc-cache -v
+
+log "Installing Catppuccin cursors..."
+wget -O ./downloads/catppuccin-mocha-dark-cursors.zip https://github.com/catppuccin/cursors/releases/latest/download/catppuccin-mocha-dark-cursors.zip
+unzip ./downloads/catppuccin-mocha-dark-cursors.zip -d ./downloads/catppuccin-mocha-dark-cursors
+
+DIRECTORY=/usr/share/icons/catppuccin-mocha-dark-cursors
+if [ ! -d "$DIRECTORY" ]; then
+  sudo cp -rf ./downloads/catppuccin-mocha-dark-cursors/catppuccin-mocha-dark-cursors /usr/share/icons/
+fi
+
+log "Installing Catppuccin Plymouth theme..."
+git clone https://github.com/catppuccin/plymouth.git $BASE_DIR/downloads/catppuccin-plymouth
+
+DIRECTORY=/usr/share/plymouth/themes/catppuccin-mocha
+if [ ! -d "$DIRECTORY" ]; then
+  sudo cp -rf $BASE_DIR/downloads/catppuccin-plymouth/themes/catppuccin-mocha /usr/share/plymouth/themes/catppuccin-mocha
+  sudo plymouth-set-default-theme -R catppuccin-mocha
+fi
+
+log "Creating home directories..."
+DIRECTORY=~/OneDrive
+if [ ! -d "$DIRECTORY" ]; then
+  mkdir $DIRECTORY
+fi
+
+DIRECTORY=~/Applications
+if [ ! -d "$DIRECTORY" ]; then
+  mkdir $DIRECTORY
+fi
+
+DIRECTORY=~/.cache/games/ow2
+if [ ! -d "$DIRECTORY" ]; then
+  mkdir -p $DIRECTORY
+fi
+
+log "Setting up VSCodium and RPM Fusion repositories..."
+sudo tee -a /etc/yum.repos.d/vscodium.repo << 'EOF'
+[gitlab.com_paulcarroty_vscodium_repo]
+name=gitlab.com_paulcarroty_vscodium_repo
+baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+metadata_expire=1h
+EOF
+
+sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
+sudo dnf swap -y ffmpeg-free ffmpeg --allowerasing
+
+log "Installing NVIDIA drivers and multimedia codecs..."
+sudo dnf update -y @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+sudo dnf install -y akmod-nvidia
+sudo dnf mark user akmod-nvidia
+sudo dnf install -y xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs xorg-x11-drv-nvidia-power vulkan nvidia-vaapi-driver libva-utils vdpauinfo
+sudo systemctl enable nvidia-{suspend,resume,hibernate}
+echo 'options nvidia NVreg_TemporaryFilePath=/var/tmp' | sudo tee /etc/modprobe.d/nvidia.conf
+
+log "Setting up Secure Boot keys for NVIDIA modules..."
+sudo dnf install kmodtool akmods mokutil openssl
+sudo kmodgenca -a
+sudo mokutil --import /etc/pki/akmods/certs/public_key.der
+
+log "Installing base packages..."
+sudo dnf clean all
+sudo dnf install -y codium bat zsh btop fzf fastfetch npm timeshift wine steam onedrive papirus-icon-theme rbw
+sudo dnf clean all
+sudo dnf install gparted -y
+
+log "Installing Bun package manager"
+sudo npm install -g bun
+
+log "Installing bitwarden cli"
+sudo npm install -g @bitwarden/cli
+
+log "Removing unused KDE applications..."
+sudo dnf remove -y plasma-discover kmailtransport kmail elisa-player korganizer kcalc dragon neochat firefox
+
+log "Installing ChezMoi and r2modman RPMs..."
+wget -O $BASE_DIR/downloads/chezmoi-2.62.4-x86_64.rpm https://github.com/twpayne/chezmoi/releases/download/v2.62.4/chezmoi-2.62.4-x86_64.rpm
+wget -O $BASE_DIR/downloads/r2modman-3.1.58.x86_64.rpm https://github.com/ebkr/r2modmanPlus/releases/download/v3.1.58/r2modman-3.1.58.x86_64.rpm
+sudo dnf install -y $BASE_DIR/downloads/chezmoi-2.62.3-x86_64.rpm $BASE_DIR/downloads/r2modman-3.1.58.x86_64.rpm
+sudo dnf clean all
+
+log "Adding Flathub repository..."
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+log "Installing Flatpak applications..."
+flatpaks=(
+  com.bitwarden.desktop
+  com.discordapp.Discord
+  com.github.IsmaelMartinez.teams_for_linux
+  com.lunarclient.LunarClient
+  com.obsproject.Studio
+  com.spotify.Client
+  com.vivaldi.Vivaldi
+  io.github.shiftey.Desktop
+  net.lutris.Lutris
+  org.blender.Blender
+  org.gnome.Calculator
+  org.gnome.baobab
+  org.kde.krita
+  org.kde.kronometer
+  org.qbittorrent.qBittorrent
+  org.videolan.VLC
+)
+
+for flatpak in ${flatpaks[@]}; do
+  flatpak install -y flathub $flatpak
+done
+
+log "Installing Eza binary..."
+wget -O $BASE_DIR/downloads/eza_x86_64-unknown-linux-gnu.zip https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.zip
+
+FILE=/usr/local/bin/eza
+if [ ! -f "$FILE" ]; then
+  sudo unzip $BASE_DIR/downloads/eza_x86_64-unknown-linux-gnu.zip -d /usr/local/bin
+fi
+
+log "Installing OneDriveGUI AppImage..."
+wget -O $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage https://github.com/bpozdena/OneDriveGUI/releases/download/v1.1.1a/OneDriveGUI-1.1.1-x86_64.AppImage
+cp -f $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage ~/Applications
+chmod + x ~/Applications/OneDriveGUI-1.1.1-x86_64.AppImage
+
+log "Installing Spicetify and applying backup..."
+flatpak run com.spotify.Client && sleep 2 && flatpak kill com.spotify.Client # to initialize spotify config files -> makes pref file appear
+
+if ! curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh; then
+  log "Spicetify prefs path setup failed but will be added in a second"
+else
+  log "Spicetify installed successfully!"
+fi
+
+sed -i "s|^prefs_path[[:space:]]*=.*|prefs_path             = /home/$USER/.var/app/com.spotify.Client/config/spotify/prefs|" ~/.config/spicetify/config-xpui.ini
+sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify
+sudo chmod a+wr -R /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps
+~/.spicetify/spicetify backup apply
+
+log "Installing VencordInstallerCli-Linux"
+wget -O $BASE_DIR/downloads/VencordInstallerCli-Linux https://github.com/Vendicated/VencordInstaller/releases/latest/download/VencordInstallerCli-Linux
+sudo cp -f $BASE_DIR/downloads/VencordInstallerCli-Linux /usr/local/bin/VencordInstallerCli-Linux
+sudo chmod +x /usr/local/bin/VencordInstallerCli-Linux
+
+log "Installing vencord"
+sudo VencordInstallerCli-Linux -install -location /var/lib/flatpak/app/com.discordapp.Discord/current/active/files/discord
+
+log "Installing openasar"
+sudo VencordInstallerCli-Linux -install-openasar -location /var/lib/flatpak/app/com.discordapp.Discord/current/active/files/discord
+
+log "Installing ssh keys"
+KEY_PAIR=$(bw get item "Github SSH")
+PRIVATE_KEY=$(jq -r '.sshKey.privateKey' <<< "$KEY_PAIR")
+PUBLIC_KEY=$(jq -r '.sshKey.publicKey' <<< "$KEY_PAIR")
+jq -r '.sshKey.privateKey' <<< "$KEY_PAIR" > ~/.ssh/id_github
+jq -r '.sshKey.publicKey' <<< "$KEY_PAIR" > ~/.ssh/id_github.pub
+chmod 600 ~/.ssh/id_github
+chmod 644 ~/.ssh/id_github.pub
+ssh-add ~/.ssh/id_github
+
+log "Importing dnf config"
+sudo cp -rf $BASE_DIR/exports/dnf.conf /etc/dnf/dnf.conf 
+
+log "Importing sddm theme and configuration"
+sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
+
+log "Installing Catppuccin GRUB theme..."
+git clone https://github.com/catppuccin/grub.git $BASE_DIR/downloads/catppuccin-grub
+
+DIRECTORY=/usr/share/grub/themes/catppuccin-mocha-grub-theme
+if [ ! -d "$DIRECTORY" ]; then
+  sudo mkdir -p $DIRECTORY
+  sudo cp -rf $BASE_DIR/downloads/catppuccin-grub/src/catppuccin-mocha-grub-theme /usr/share/grub/themes/
+fi
+
+log "Configuring GRUB with custom options..."
+UUID=$(sudo blkid | awk '/swap/ && !/zram/ { match($0, /UUID="([^"]+)"/, a); print a[1] }')
+sed -i "s/\(resume=UUID=\)[^[:space:]\"]*/\1$UUID/" exports/grub
+sudo cp -f $BASE_DIR/exports/grub /etc/default/grub
+
+log "Change hostname"
+sudo hostnamectl set-hostname the-yp-machine
+
+log "Updating GRUB and regenerating initramfs..."
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+sudo dracut --regenerate-all --force
+
+log "Installing oh-my-zsh and plugins"
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
+
+RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c \
+  "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/catppuccin/zsh-syntax-highlighting.git
+cd zsh-syntax-highlighting/themes/
+cp -f catppuccin_mocha-zsh-syntax-highlighting.zsh ~/.oh-my-zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+chsh -s $(which zsh)
+
+log "Installing starship"
+curl -sS https://starship.rs/install.sh | sh
+
+chezmoi init https://github.com/YP501/kde-dotfiles.git
+chezmoi apply -v
+
+log "🎉 Setup complete! It is recommended to reboot the system now."
+read -p "Would you like to reboot? (y/n): " reboot_answer
+if [ "$reboot_answer" != "${reboot_answer#[Yy]}" ]; then
+    sudo reboot
+fi
