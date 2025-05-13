@@ -7,8 +7,6 @@ log() {
   echo
 }
 
-
-
 # Creating downloads and exports folder
 mkdir $BASE_DIR/downloads
 mkdir $BASE_DIR/exports
