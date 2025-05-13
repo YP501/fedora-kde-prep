@@ -7,10 +7,11 @@ log() {
   echo
 }
 
-# Clearing downloads and exports folder
-log "Clearing downloads and exports folder"
-rm -r $BASE_DIR/exports/*
-rm -r $BASE_DIR/downloads/*
+
+
+# Creating downloads and exports folder
+mkdir $BASE_DIR/downloads
+mkdir $BASE_DIR/exports
 
 # Backup Chezmoi configurations
 cd ~/.local/share/chezmoi
