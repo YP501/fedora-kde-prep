@@ -112,8 +112,8 @@ sudo dnf install -y codium bat zsh btop fzf fastfetch npm timeshift wine steam o
 sudo dnf clean all
 sudo dnf install gparted -y
 
-log "Installing Bun package manager"
-sudo npm install -g bun
+log "Installing deno js runtime"
+curl -fsSL https://deno.land/install.sh | sh
 
 log "Installing bitwarden cli"
 sudo npm install -g @bitwarden/cli
