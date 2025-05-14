@@ -111,15 +111,12 @@ sudo mokutil --import /etc/pki/akmods/certs/public_key.der
 
 log "Installing base packages..."
 sudo dnf clean all
-sudo dnf install -y codium bat zsh btop fzf fastfetch npm timeshift wine steam onedrive papirus-icon-theme rbw
+sudo dnf install -y codium bat zsh btop fzf fastfetch timeshift wine steam onedrive papirus-icon-theme rbw
 sudo dnf clean all
 sudo dnf install gparted -y
 
 log "Installing deno js runtime"
 curl -fsSL https://deno.land/install.sh | sh
-
-log "Installing bitwarden cli"
-sudo npm install -g @bitwarden/cli
 
 log "Removing unused KDE applications..."
 sudo dnf remove -y plasma-discover kmailtransport kmail elisa-player korganizer kcalc dragon neochat firefox
@@ -203,7 +200,7 @@ jq -r '.sshKey.privateKey' <<< "$KEY_PAIR" > ~/.ssh/id_github
 jq -r '.sshKey.publicKey' <<< "$KEY_PAIR" > ~/.ssh/id_github.pub
 chmod 600 ~/.ssh/id_github
 chmod 644 ~/.ssh/id_github.pub
-ssh-add ~/.ssh/id_github
+ssh-add -K ~/.ssh/id_github
 
 log "Importing sddm theme and configuration"
 sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
