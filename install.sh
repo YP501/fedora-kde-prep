@@ -29,6 +29,9 @@ rm -rf $BASE_DIR/downloads/*
 log "Installing needed libraries"
 sudo dnf install python3-pip git -y
 
+log "Importing dnf config for faster downloads"
+sudo cp -rf $BASE_DIR/exports/dnf.conf /etc/dnf/dnf.conf 
+
 log "Installing JetBrains Mono Nerd Font..."
 wget -O $BASE_DIR/downloads/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
 
@@ -201,9 +204,6 @@ jq -r '.sshKey.publicKey' <<< "$KEY_PAIR" > ~/.ssh/id_github.pub
 chmod 600 ~/.ssh/id_github
 chmod 644 ~/.ssh/id_github.pub
 ssh-add ~/.ssh/id_github
-
-log "Importing dnf config"
-sudo cp -rf $BASE_DIR/exports/dnf.conf /etc/dnf/dnf.conf 
 
 log "Importing sddm theme and configuration"
 sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
