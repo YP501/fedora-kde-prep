@@ -111,7 +111,7 @@ sudo mokutil --import /etc/pki/akmods/certs/public_key.der
 
 log "Installing base packages..."
 sudo dnf clean all
-sudo dnf install -y codium bat zsh btop fzf fastfetch timeshift wine steam onedrive papirus-icon-theme rbw
+sudo dnf install -y codium bat zsh btop fzf fastfetch timeshift wine steam onedrive papirus-icon-theme
 sudo dnf clean all
 sudo dnf install gparted -y
 
@@ -124,7 +124,7 @@ sudo dnf remove -y plasma-discover kmailtransport kmail elisa-player korganizer 
 log "Installing ChezMoi and r2modman RPMs..."
 wget -O $BASE_DIR/downloads/chezmoi-2.62.4-x86_64.rpm https://github.com/twpayne/chezmoi/releases/download/v2.62.4/chezmoi-2.62.4-x86_64.rpm
 wget -O $BASE_DIR/downloads/r2modman-3.1.58.x86_64.rpm https://github.com/ebkr/r2modmanPlus/releases/download/v3.1.58/r2modman-3.1.58.x86_64.rpm
-sudo dnf install -y $BASE_DIR/downloads/chezmoi-2.62.3-x86_64.rpm $BASE_DIR/downloads/r2modman-3.1.58.x86_64.rpm
+sudo dnf install -y $BASE_DIR/downloads/chezmoi-2.62.4-x86_64.rpm $BASE_DIR/downloads/r2modman-3.1.58.x86_64.rpm
 sudo dnf clean all
 
 log "Adding Flathub repository..."
@@ -165,42 +165,7 @@ fi
 log "Installing OneDriveGUI AppImage..."
 wget -O $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage https://github.com/bpozdena/OneDriveGUI/releases/download/v1.1.1a/OneDriveGUI-1.1.1-x86_64.AppImage
 cp -f $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage ~/Applications
-chmod + x ~/Applications/OneDriveGUI-1.1.1-x86_64.AppImage
-
-log "Installing Spicetify and applying backup..."
-flatpak run com.spotify.Client && sleep 2 && flatpak kill com.spotify.Client # to initialize spotify config files -> makes pref file appear
-
-if ! curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh; then
-  log "Spicetify prefs path setup failed but will be added in a second"
-else
-  log "Spicetify installed successfully!"
-fi
-
-sed -i "s|^prefs_path[[:space:]]*=.*|prefs_path             = /home/$USER/.var/app/com.spotify.Client/config/spotify/prefs|" ~/.config/spicetify/config-xpui.ini
-sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify
-sudo chmod a+wr -R /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps
-~/.spicetify/spicetify backup apply
-
-log "Installing VencordInstallerCli-Linux"
-wget -O $BASE_DIR/downloads/VencordInstallerCli-Linux https://github.com/Vendicated/VencordInstaller/releases/latest/download/VencordInstallerCli-Linux
-sudo cp -f $BASE_DIR/downloads/VencordInstallerCli-Linux /usr/local/bin/VencordInstallerCli-Linux
-sudo chmod +x /usr/local/bin/VencordInstallerCli-Linux
-
-log "Installing vencord"
-sudo VencordInstallerCli-Linux -install -location /var/lib/flatpak/app/com.discordapp.Discord/current/active/files/discord
-
-log "Installing openasar"
-sudo VencordInstallerCli-Linux -install-openasar -location /var/lib/flatpak/app/com.discordapp.Discord/current/active/files/discord
-
-log "Installing ssh keys"
-KEY_PAIR=$(bw get item "Github SSH")
-PRIVATE_KEY=$(jq -r '.sshKey.privateKey' <<< "$KEY_PAIR")
-PUBLIC_KEY=$(jq -r '.sshKey.publicKey' <<< "$KEY_PAIR")
-jq -r '.sshKey.privateKey' <<< "$KEY_PAIR" > ~/.ssh/id_github
-jq -r '.sshKey.publicKey' <<< "$KEY_PAIR" > ~/.ssh/id_github.pub
-chmod 600 ~/.ssh/id_github
-chmod 644 ~/.ssh/id_github.pub
-ssh-add -K ~/.ssh/id_github
+chmod +x ~/Applications/OneDriveGUI-1.1.1-x86_64.AppImage
 
 log "Importing sddm theme and configuration"
 sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
