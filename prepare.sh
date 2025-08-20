@@ -22,9 +22,8 @@ chezmoi git -- push
 
 # Backup non-home files
 
-# Temporary disable these to hopefully fix sddm
-# log "Exporting sddm theme and configuration"
-# cp -r /usr/share/sddm/themes/where_is_my_sddm_theme $BASE_DIR/exports/where_is_my_sddm_theme
+log "Exporting sddm theme and configuration"
+cp -r /usr/share/sddm/themes/where_is_my_sddm_theme $BASE_DIR/exports/where_is_my_sddm_theme
 
 log "Exporting dnf config"
 cp /etc/dnf/dnf.conf $BASE_DIR/exports/dnf.conf

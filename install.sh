@@ -168,9 +168,8 @@ mkdir -p ~/.config/user-tmpfiles.d
 echo 'L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0' > ~/.config/user-tmpfiles.d/discord-rpc.conf
 systemctl --user enable --now systemd-tmpfiles-setup.service
 
-# Temporary disable these to hopefully fix sddm
-# log "Importing sddm theme and configuration"
-# sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
+log "Importing sddm theme and configuration"
+sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
 
 log "Installing Catppuccin GRUB theme..."
 git clone https://github.com/catppuccin/grub.git $BASE_DIR/downloads/catppuccin-grub
@@ -182,14 +181,14 @@ if [ ! -d "$DIRECTORY" ]; then
 fi
 
 log "Configuring GRUB with custom options..."
-UUID=$(sudo blkid | awk '/swap/ && !/zram/ { match($0, /UUID="([^"]+)"/, a); print a[1] }')
-sed -i "s/\(resume=UUID=\)[^[:space:]\"]*/\1$UUID/" exports/grub
+# UUID=$(sudo blkid | awk '/swap/ && !/zram/ { match($0, /UUID="([^"]+)"/, a); print a[1] }')
+# sed -i "s/\(resume=UUID=\)[^[:space:]\"]*/\1$UUID/" exports/grub
 sudo cp -f $BASE_DIR/exports/grub /etc/default/grub
 
 log "Change hostname"
 sudo hostnamectl set-hostname the-yp-machine
 
-log "Buildi bat cache"
+log "Build bat cache"
 bat cache --build
 
 log "Updating GRUB and regenerating initramfs..."
