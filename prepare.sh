@@ -22,8 +22,10 @@ log "Pushing changes to Git repository"
 git push -u origin main
 
 # Backup non-home files
-log "Exporting sddm theme and configuration"
-cp -r /usr/share/sddm/themes/where_is_my_sddm_theme $BASE_DIR/exports/where_is_my_sddm_theme
+
+# Temporary disable these to hopefully fix sddm
+# log "Exporting sddm theme and configuration"
+# cp -r /usr/share/sddm/themes/where_is_my_sddm_theme $BASE_DIR/exports/where_is_my_sddm_theme
 
 log "Exporting dnf config"
 cp /etc/dnf/dnf.conf $BASE_DIR/exports/dnf.conf

@@ -108,7 +108,7 @@ sudo dnf install -y nodejs yarnpkg code bat zsh btop fzf fastfetch timeshift win
 sudo dnf clean all
 
 log "Removing unused KDE applications..."
-sudo dnf remove -y kdeconnectd plasma-discover kmailtransport kmail elisa-player korganizer kcalc dragon neochat firefox
+sudo dnf remove -y plasma-discover kmailtransport kmail elisa-player korganizer kcalc dragon neochat firefox
 
 log "Installing ChezMoi and r2modman RPMs..."
 wget -O $BASE_DIR/downloads/chezmoi-2.62.5-x86_64.rpm https://github.com/twpayne/chezmoi/releases/download/2.62.5/chezmoi-2.62.5-x86_64.rpm
@@ -137,21 +137,27 @@ flatpak remote-delete fedora
 log "Installing Flatpak applications..."
 flatpaks=(
   com.bitwarden.desktop
+  com.getpostman.Postman
   com.github.IsmaelMartinez.teams_for_linux
   com.lunarclient.LunarClient
   com.obsproject.Studio
   com.spotify.Client
   com.vivaldi.Vivaldi
+  dev.vencord.Vesktop
   io.github.shiftey.Desktop
   net.lutris.Lutris
   org.blender.Blender
+  org.fedoraproject.MediaWriter
+  org.gnome.Boxes
   org.gnome.Calculator
   org.kde.krita
   org.kde.kronometer
+  org.localsend.localsend_app
   org.qbittorrent.qBittorrent
   org.videolan.VLC
-  dev.vencord.Vesktop
   org.vinegarhq.Sober
+  org.vinegarhq.Vinegar
+  xyz.xclicker.xclicker
 )
 
 for flatpak in ${flatpaks[@]}; do
@@ -162,8 +168,9 @@ mkdir -p ~/.config/user-tmpfiles.d
 echo 'L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0' > ~/.config/user-tmpfiles.d/discord-rpc.conf
 systemctl --user enable --now systemd-tmpfiles-setup.service
 
-log "Importing sddm theme and configuration"
-sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
+# Temporary disable these to hopefully fix sddm
+# log "Importing sddm theme and configuration"
+# sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 
 
 log "Installing Catppuccin GRUB theme..."
 git clone https://github.com/catppuccin/grub.git $BASE_DIR/downloads/catppuccin-grub
