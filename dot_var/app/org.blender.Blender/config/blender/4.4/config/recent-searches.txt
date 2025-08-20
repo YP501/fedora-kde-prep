@@ -1,3 +1,0 @@
-Texture ▸ Image Texture
-Vector ▸ Bump
-   Material.001
