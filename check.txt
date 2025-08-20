@@ -9,3 +9,6 @@ protom 8.0-5
 
 - Geometry dash launch options:
 WINEDLLOVERRIDES="xinput1_4=n,b" %command%
+
+- Marvel Rivals
+SteamDeck=1 %command%
