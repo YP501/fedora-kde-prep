@@ -1,0 +1,175 @@
+[ColorEffects:Disabled]
+ChangeSelectionColor=
+Color=30, 30, 46
+ColorAmount=0.30000000000000004
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=0
+Enable=
+IntensityAmount=-1
+IntensityEffect=0
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=true
+Color=30, 30, 46
+ColorAmount=0.5
+ColorEffect=3
+ContrastAmount=0
+ContrastEffect=0
+Enable=true
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=243,139,168
+BackgroundNormal=49, 50, 68
+DecorationFocus=243,139,168
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=243,139,168
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Complementary]
+BackgroundAlternate=17, 17, 27
+BackgroundNormal=24, 24, 37
+DecorationFocus=243,139,168
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=243,139,168
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Header]
+BackgroundAlternate=17, 17, 27
+BackgroundNormal=24, 24, 37
+DecorationFocus=243,139,168
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=243,139,168
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Selection]
+BackgroundAlternate=243,139,168
+BackgroundNormal=243,139,168
+DecorationFocus=243,139,168
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=24, 24, 37
+ForegroundLink=243,139,168
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=17, 17, 27
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Tooltip]
+BackgroundAlternate=27,25,35
+BackgroundNormal=30, 30, 46
+DecorationFocus=243,139,168
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=243,139,168
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:View]
+BackgroundAlternate=24, 24, 37
+BackgroundNormal=30, 30, 46
+DecorationFocus=243,139,168
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=243,139,168
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[Colors:Window]
+BackgroundAlternate=17, 17, 27
+BackgroundNormal=24, 24, 37
+DecorationFocus=243,139,168
+DecorationHover=49, 50, 68
+ForegroundActive=250, 179, 135
+ForegroundInactive=166, 173, 200
+ForegroundLink=243,139,168
+ForegroundNegative=243, 139, 168
+ForegroundNeutral=249, 226, 175
+ForegroundNormal=205, 214, 244
+ForegroundPositive=166, 227, 161
+ForegroundVisited=203, 166, 247
+
+[DirSelect Dialog]
+DirSelectDialog Size=1920,1024
+History Items[$e]=file:$HOME/Downloads/eek,file:$HOME/Documents/Programming/gay detector,file:$HOME/Desktop/test,file:$HOME/Documents/GitHub/nixos,file:$HOME/Documents/GitHub/nixos,file:$HOME/Documents/Programming/Looker visuals,file:$HOME/Documents/GitHub/fedora-kde-prep,file:$HOME/Documents/Programming/Looker visuals,file:$HOME/Documents/Programming/Looker visuals,file:$HOME/Documents/GitHub/fedora-kde-prep,file:$HOME/Documents/Programming/Looker visuals,file:$HOME/Documents/GitHub/fedora-kde-prep,file:$HOME/Documents/GitHub/fedora-kde-prep,file:$HOME/Documents/GitHub/fedora-kde-prep,file:$HOME/.local/share/chezmoi/,file:$HOME/Documents/GitHub/fedora-kde-prep,file:$HOME/Desktop/fedoraKDEprep,file:$HOME/Desktop/fedoraKDEprep,file:$HOME/Desktop/fedoraKDEprep,file:$HOME/Desktop/fedoraKDEprep,file:$HOME/Desktop/fedoraKDEprep,file:$HOME/Desktop/fedoraKDEprep,file:$HOME/Desktop/fedoraKDEprep,file:$HOME/.steam/steam/steamapps/compatdata/2060160/pfx/drive_c/users/steamuser/AppData/LocalLow/TheFarmerWasReplaced/TheFarmerWasReplaced/Saves/Save0/,file:$HOME/.steam/steam/steamapps/compatdata/2060160/pfx/drive_c/users/steamuser/AppData/LocalLow/,file:$HOME/.steam/steam/steamapps/compatdata/2060160/pfx/drive_c/users/steamuser/AppData/LocalLow/TheFarmerWasReplaced/TheFarmerWasReplaced/Saves/,file:$HOME/.steam/steam/steamapps/compatdata/2060160/pfx/drive_c/,file:$HOME/Videos/Recordings,file:$HOME/.var/app/net.pcsx2.PCSX2/config/PCSX2/games/,file:$HOME/.var/app/net.pcsx2.PCSX2/config/PCSX2/bios,file:$HOME/.local/share/Steam/steamapps/compatdata/2060160/pfx/drive_c/users/steamuser/AppData/LocalLow/TheFarmerWasReplaced/TheFarmerWasReplaced/Saves/,file:$HOME/Downloads/pluh,file:$HOME/Documents/Programming/amper codeth,file:$HOME/Downloads/Torrents,file:$HOME/Documents/GitHub,file:$HOME/Documents/GitHub/scrappy-bot-ts,file:$HOME/Documents/GitHub/scrappy-bot-ts,file:$HOME/Documents/Programming/ktane,file:$HOME/Documents/Programming/ktane,file:$HOME/.local/share/chezmoi,file:$HOME/Documents/GitHub/scrappy-bot,file:$HOME/Documents/GitHub,file:$HOME/Games,file:$HOME/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common,file:///usr,file:///mnt/backups/Pika Backup,file:///mnt/backups
+Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x87\x00\x00\x04[\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
+
+[General]
+ColorSchemeHash=f1f9070f37b7fc13745de03b077f3a05647f7b6e
+UseSystemBell=true
+XftHintStyle=hintslight
+XftSubPixel=none
+fixed=JetBrainsMono Nerd Font Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+font=Roboto,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+menuFont=Roboto,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+smallestReadableFont=Roboto,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+toolBarFont=Roboto,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[Icons]
+Theme=Papirus
+
+[KDE]
+LookAndFeelPackage=org.kde.breeze.desktop
+ShowDeleteCommand=false
+
+[KFileDialog Settings]
+Allow Expansion=false
+Automatically select filename extension=true
+Breadcrumb Navigation=false
+Decoration position=2
+LocationCombo Completionmode=5
+PathCombo Completionmode=5
+Show Bookmarks=false
+Show Full Path=false
+Show Inline Previews=true
+Show Preview=false
+Show Speedbar=true
+Show hidden files=true
+Sort by=Name
+Sort directories first=true
+Sort hidden files last=false
+Sort reversed=false
+Speedbar Width=140
+View Style=Simple
+
+[PreviewSettings]
+EnableRemoteFolderThumbnail=false
+MaximumRemoteSize=0
+
+[WM]
+activeBackground=30,30,46
+activeBlend=205,214,244
+activeFont=Roboto,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+activeForeground=205,214,244
+inactiveBackground=17,17,27
+inactiveBlend=166,173,200
+inactiveForeground=166,173,200

@@ -1,0 +1,27 @@
+[1e3972a5-b982-4515-9406-1fba04128453]
+Description=Application settings for blender
+desktopfile=org.blender.Blender
+desktopfilerule=3
+wmclass=\sblender
+wmclasscomplete=true
+wmclassmatch=1
+
+[44e43465-9cd2-4586-882d-1f6988c31491]
+Description=Application settings for GitHub Desktop
+desktopfile=io.github.shiftey.Desktop
+desktopfilerule=3
+wmclass=\sGitHub Desktop
+wmclasscomplete=true
+wmclassmatch=1
+
+[General]
+count=3
+rules=b500d0fe-2c59-4114-af78-4dde5e4940e7,44e43465-9cd2-4586-882d-1f6988c31491,1e3972a5-b982-4515-9406-1fba04128453
+
+[b500d0fe-2c59-4114-af78-4dde5e4940e7]
+Description=Application settings for gimp
+desktopfile=org.gimp.GIMP
+desktopfilerule=3
+wmclass=\sgimp
+wmclasscomplete=true
+wmclassmatch=1

@@ -1,0 +1,14 @@
+MenuBar=Disabled
+
+[Desktop Entry]
+DefaultProfile=Catppuccin.profile
+
+[General]
+ConfigVersion=1
+
+[MainWindow]
+MenuBar=Disabled
+ToolBarsMovable=Enabled
+
+[UiSettings]
+ColorScheme=

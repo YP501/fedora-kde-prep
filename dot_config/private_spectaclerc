@@ -1,0 +1,17 @@
+[Annotations]
+annotationToolType=6
+rectangleStrokeColor=255,0,0
+
+[General]
+launchAction=DoNotTakeScreenshot
+
+[GuiConfig]
+captureMode=0
+
+[ImageSave]
+lastImageSaveAsLocation=file:///home/yp/Pictures/Screenshots/spider chart example.png
+lastImageSaveLocation=file:///home/yp/Pictures/Screenshots/Screenshot_20250820_212443.png
+translatedScreenshotsFolder=Screenshots
+
+[VideoSave]
+translatedScreencastsFolder=Screencasts
