@@ -737,4 +737,4 @@ PreloadWeight=42
 
 [ScreenMapping]
 itemsOnDisabledScreens=
-screenMapping=desktop:nixos-minimal-25.05.802674.7848cd8c982f-x86_64-linux.iso,0,5ce71c59-0a3e-42f7-81da-ebde22593916,desktop:/kpn info,0,5ce71c59-0a3e-42f7-81da-ebde22593916,desktop:/fedora-kde-prep,0,5ce71c59-0a3e-42f7-81da-ebde22593916,desktop:/fedoraKDEprep,0,fd85b5a4-ea54-41dc-af35-edb603374934,desktop:kpn info.txt,0,5ce71c59-0a3e-42f7-81da-ebde22593916
+screenMapping=desktop:/fedoraKDEprep,0,fd85b5a4-ea54-41dc-af35-edb603374934,desktop:nixos-minimal-25.05.802674.7848cd8c982f-x86_64-linux.iso,0,5ce71c59-0a3e-42f7-81da-ebde22593916,desktop:/kpn info,0,5ce71c59-0a3e-42f7-81da-ebde22593916,desktop:kpn info.txt,0,5ce71c59-0a3e-42f7-81da-ebde22593916,desktop:/fedora-kde-prep,0,5ce71c59-0a3e-42f7-81da-ebde22593916
