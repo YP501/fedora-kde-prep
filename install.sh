@@ -30,7 +30,7 @@ log "Installing needed libraries"
 sudo dnf install python3-pip git -y
 
 log "Importing dnf config for faster downloads"
-sudo cp -rf $BASE_DIR/exports/dnf.conf /etc/dnf/dnf.conf 
+sudo cp -rf $BASE_DIR/exports/dnf.conf /etc/dnf/dnf.conf
 
 log "Installing JetBrains Mono Nerd Font..."
 wget -O $BASE_DIR/downloads/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
@@ -80,17 +80,9 @@ if [ ! -d "$DIRECTORY" ]; then
   mkdir -p $DIRECTORY
 fi
 
-log "Setting up VSCodium and RPM Fusion repositories..."
-sudo tee -a /etc/yum.repos.d/vscodium.repo << 'EOF'
-[gitlab.com_paulcarroty_vscodium_repo]
-name=gitlab.com_paulcarroty_vscodium_repo
-baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
-metadata_expire=1h
-EOF
+log "Setting up VSCode and RPM Fusion repositories..."
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
 
 sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
@@ -104,59 +96,28 @@ sudo dnf install -y xorg-x11-drv-nvidia-cuda xorg-x11-drv-nvidia-cuda-libs xorg-
 sudo systemctl enable nvidia-{suspend,resume,hibernate}
 echo 'options nvidia NVreg_TemporaryFilePath=/var/tmp' | sudo tee /etc/modprobe.d/nvidia.conf
 
-log "Setting up Secure Boot keys for NVIDIA modules..."
-sudo dnf install kmodtool akmods mokutil openssl
-sudo kmodgenca -a
-sudo mokutil --import /etc/pki/akmods/certs/public_key.der
+# # Comment out the following lines if you do not want to set up Secure Boot keys for NVIDIA modules
+# log "Setting up Secure Boot keys for NVIDIA modules..."
+# sudo dnf install kmodtool akmods mokutil openssl
+# sudo kmodgenca -a
+# sudo mokutil --import /etc/pki/akmods/certs/public_key.der
 
 log "Installing base packages..."
 sudo dnf clean all
-sudo dnf install -y codium bat zsh btop fzf fastfetch timeshift wine steam onedrive papirus-icon-theme
+sudo dnf install -y nodejs yarnpkg code bat zsh btop fzf fastfetch timeshift wine steam onedrive papirus-icon-theme
 sudo dnf clean all
-sudo dnf install gparted -y
-
-log "Installing deno js runtime"
-curl -fsSL https://deno.land/install.sh | sh
 
 log "Removing unused KDE applications..."
-sudo dnf remove -y plasma-discover kmailtransport kmail elisa-player korganizer kcalc dragon neochat firefox
+sudo dnf remove -y kdeconnectd plasma-discover kmailtransport kmail elisa-player korganizer kcalc dragon neochat firefox
 
 log "Installing ChezMoi and r2modman RPMs..."
-wget -O $BASE_DIR/downloads/chezmoi-2.62.4-x86_64.rpm https://github.com/twpayne/chezmoi/releases/download/v2.62.4/chezmoi-2.62.4-x86_64.rpm
-wget -O $BASE_DIR/downloads/r2modman-3.1.58.x86_64.rpm https://github.com/ebkr/r2modmanPlus/releases/download/v3.1.58/r2modman-3.1.58.x86_64.rpm
-sudo dnf install -y $BASE_DIR/downloads/chezmoi-2.62.4-x86_64.rpm $BASE_DIR/downloads/r2modman-3.1.58.x86_64.rpm
+wget -O $BASE_DIR/downloads/chezmoi-2.62.5-x86_64.rpm https://github.com/twpayne/chezmoi/releases/download/2.62.5/chezmoi-2.62.5-x86_64.rpm
+wget -O $BASE_DIR/downloads/r2modman-3.2.0.x86_64.rpm https://github.com/ebkr/r2modmanPlus/releases/download/v3.2.0/r2modman-3.2.0.x86_64.rpm
+sudo dnf install -y $BASE_DIR/downloads/chezmoi-2.62.5-x86_64.rpm $BASE_DIR/downloads/r2modman-3.2.0.x86_64.rpm
 sudo dnf clean all
-
-log "Adding Flathub repository..."
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-log "Installing Flatpak applications..."
-flatpaks=(
-  com.bitwarden.desktop
-  com.discordapp.Discord
-  com.github.IsmaelMartinez.teams_for_linux
-  com.lunarclient.LunarClient
-  com.obsproject.Studio
-  com.spotify.Client
-  com.vivaldi.Vivaldi
-  io.github.shiftey.Desktop
-  net.lutris.Lutris
-  org.blender.Blender
-  org.gnome.Calculator
-  org.gnome.baobab
-  org.kde.krita
-  org.kde.kronometer
-  org.qbittorrent.qBittorrent
-  org.videolan.VLC
-)
-
-for flatpak in ${flatpaks[@]}; do
-  flatpak install -y flathub $flatpak
-done
 
 log "Installing Eza binary..."
 wget -O $BASE_DIR/downloads/eza_x86_64-unknown-linux-gnu.zip https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.zip
-
 FILE=/usr/local/bin/eza
 if [ ! -f "$FILE" ]; then
   sudo unzip $BASE_DIR/downloads/eza_x86_64-unknown-linux-gnu.zip -d /usr/local/bin
@@ -166,6 +127,40 @@ log "Installing OneDriveGUI AppImage..."
 wget -O $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage https://github.com/bpozdena/OneDriveGUI/releases/download/v1.1.1a/OneDriveGUI-1.1.1-x86_64.AppImage
 cp -f $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage ~/Applications
 chmod +x ~/Applications/OneDriveGUI-1.1.1-x86_64.AppImage
+
+log "Adding Flathub repository..."
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+log "Removing fedora flatpak remote..."
+flatpak remote-delete fedora
+
+log "Installing Flatpak applications..."
+flatpaks=(
+  com.bitwarden.desktop
+  com.github.IsmaelMartinez.teams_for_linux
+  com.lunarclient.LunarClient
+  com.obsproject.Studio
+  com.spotify.Client
+  com.vivaldi.Vivaldi
+  io.github.shiftey.Desktop
+  net.lutris.Lutris
+  org.blender.Blender
+  org.gnome.Calculator
+  org.kde.krita
+  org.kde.kronometer
+  org.qbittorrent.qBittorrent
+  org.videolan.VLC
+  dev.vencord.Vesktop
+  org.vinegarhq.Sober
+)
+
+for flatpak in ${flatpaks[@]}; do
+  flatpak install -y flathub $flatpak
+done
+
+mkdir -p ~/.config/user-tmpfiles.d
+echo 'L %t/discord-ipc-0 - - - - .flatpak/dev.vencord.Vesktop/xdg-run/discord-ipc-0' > ~/.config/user-tmpfiles.d/discord-rpc.conf
+systemctl --user enable --now systemd-tmpfiles-setup.service
 
 log "Importing sddm theme and configuration"
 sudo cp -rf $BASE_DIR/exports/where_is_my_sddm_theme /usr/share/sddm/themes/where_is_my_sddm_theme 

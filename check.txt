@@ -1,3 +1,5 @@
+set up steam-presence
+
 - Open steam lol
 __GL_CONSTANT_FRAME_RATE_HINT=3 steam
 
