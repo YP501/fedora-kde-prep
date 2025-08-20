@@ -189,6 +189,9 @@ sudo cp -f $BASE_DIR/exports/grub /etc/default/grub
 log "Change hostname"
 sudo hostnamectl set-hostname the-yp-machine
 
+log "Buildi bat cache"
+bat cache --build
+
 log "Updating GRUB and regenerating initramfs..."
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 sudo dracut --regenerate-all --force
@@ -210,7 +213,7 @@ chsh -s $(which zsh)
 log "Installing starship"
 curl -sS https://starship.rs/install.sh | sh
 
-chezmoi init https://github.com/YP501/kde-dotfiles.git
+chezmoi init git@github.com:YP501/kde-dotfiles.git
 chezmoi apply -v
 
 log "🎉 Setup complete! It is recommended to reboot the system now."

@@ -12,14 +12,13 @@ mkdir $BASE_DIR/downloads
 mkdir $BASE_DIR/exports
 
 # Backup Chezmoi configurations
-cd ~/.local/share/chezmoi
 log "Re-adding files to Chezmoi"
 chezmoi re-add
 log "Committing changes to Git"
-chezmoi git add .
-git commit -m "Backup $(date)"
+chezmoi git -- add -A
+chezmoi git -- commit -m "Backup $(date)" || true
 log "Pushing changes to Git repository"
-git push -u origin main
+chezmoi git -- push
 
 # Backup non-home files
 
