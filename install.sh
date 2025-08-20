@@ -111,9 +111,9 @@ log "Removing unused KDE applications..."
 sudo dnf remove -y plasma-discover kmailtransport kmail elisa-player korganizer kcalc dragon neochat firefox
 
 log "Installing ChezMoi and r2modman RPMs..."
-wget -O $BASE_DIR/downloads/chezmoi-2.62.5-x86_64.rpm https://github.com/twpayne/chezmoi/releases/download/2.62.5/chezmoi-2.62.5-x86_64.rpm
-wget -O $BASE_DIR/downloads/r2modman-3.2.0.x86_64.rpm https://github.com/ebkr/r2modmanPlus/releases/download/v3.2.0/r2modman-3.2.0.x86_64.rpm
-sudo dnf install -y $BASE_DIR/downloads/chezmoi-2.62.5-x86_64.rpm $BASE_DIR/downloads/r2modman-3.2.0.x86_64.rpm
+wget -O $BASE_DIR/downloads/chezmoi.rpm https://github.com/twpayne/chezmoi/releases/download/v2.64.0/chezmoi-2.64.0-x86_64.rpm
+wget -O $BASE_DIR/downloads/r2modman.rpm https://github.com/ebkr/r2modmanPlus/releases/download/v3.2.3/r2modman-3.2.3.x86_64.rpm
+sudo dnf install -y $BASE_DIR/downloads/chezmoi.rpm $BASE_DIR/downloads/r2modman.rpm
 sudo dnf clean all
 
 log "Installing Eza binary..."
@@ -124,9 +124,9 @@ if [ ! -f "$FILE" ]; then
 fi
 
 log "Installing OneDriveGUI AppImage..."
-wget -O $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage https://github.com/bpozdena/OneDriveGUI/releases/download/v1.1.1a/OneDriveGUI-1.1.1-x86_64.AppImage
-cp -f $BASE_DIR/downloads/OneDriveGUI-1.1.1-x86_64.AppImage ~/Applications
-chmod +x ~/Applications/OneDriveGUI-1.1.1-x86_64.AppImage
+wget -O $BASE_DIR/downloads/OneDriveGUI.AppImage https://github.com/bpozdena/OneDriveGUI/releases/download/v1.2.1/OneDriveGUI-1.2.1-x86_64.AppImage
+cp -f $BASE_DIR/downloads/OneDriveGUI.AppImage ~/Applications
+chmod +x ~/Applications/OneDriveGUI.AppImage
 
 log "Adding Flathub repository..."
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
