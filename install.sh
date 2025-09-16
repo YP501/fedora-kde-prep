@@ -188,11 +188,10 @@ sudo cp -f $BASE_DIR/exports/grub /etc/default/grub
 log "Change hostname"
 sudo hostnamectl set-hostname the-yp-machine
 
-log "Build bat cache"
-bat cache --build
+log "Updating GRUB..."
+sudo grub2-mkconfig -o /etc/grub2-efi.cfg
 
-log "Updating GRUB and regenerating initramfs..."
-sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+log "Regenerating initramfs..."
 sudo dracut --regenerate-all --force
 
 log "Installing oh-my-zsh and plugins"
@@ -212,8 +211,12 @@ chsh -s $(which zsh)
 log "Installing starship"
 curl -sS https://starship.rs/install.sh | sh
 
-chezmoi init git@github.com:YP501/kde-dotfiles.git
+chezmoi init https://github.com/YP501/kde-dotfiles.git
 chezmoi apply -v
+chezmoi git -- remote set-url origin git@github.com:YP501/kde-dotfiles.git
+
+log "Build bat cache"
+bat cache --build
 
 log "🎉 Setup complete! It is recommended to reboot the system now."
 read -p "Would you like to reboot? (y/n): " reboot_answer

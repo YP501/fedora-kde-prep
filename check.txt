@@ -1,5 +1,9 @@
 set up steam-presence
 
+set up vencord config
+
+set up spicetify
+
 - Open steam lol
 __GL_CONSTANT_FRAME_RATE_HINT=3 steam
 
